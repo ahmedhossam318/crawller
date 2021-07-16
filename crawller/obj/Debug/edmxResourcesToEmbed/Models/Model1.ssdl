@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="crawllerdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="indexer">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="term" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="doc_id" Type="int" Nullable="false" />
+    <Property Name="frequancy" Type="int" Nullable="false" />
+    <Property Name="position" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="page">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="url" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="content" Type="text" Nullable="false" />
+  </EntityType>
+  <EntityType Name="terms_before_Stemming">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="term" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="doc_id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_indexer_page">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="indexer" Type="Self.indexer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="indexer">
+        <PropertyRef Name="doc_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_terms_before_Stemming_page">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="terms_before_Stemming" Type="Self.terms_before_Stemming" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="terms_before_Stemming">
+        <PropertyRef Name="doc_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="crawllerdbModelStoreContainer">
+    <EntitySet Name="indexer" EntityType="Self.indexer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="page" EntityType="Self.page" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="terms_before_Stemming" EntityType="Self.terms_before_Stemming" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_indexer_page" Association="Self.FK_indexer_page">
+      <End Role="page" EntitySet="page" />
+      <End Role="indexer" EntitySet="indexer" />
+    </AssociationSet>
+    <AssociationSet Name="FK_terms_before_Stemming_page" Association="Self.FK_terms_before_Stemming_page">
+      <End Role="page" EntitySet="page" />
+      <End Role="terms_before_Stemming" EntitySet="terms_before_Stemming" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="crawllerdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="indexer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="term" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="doc_id" Type="int" Nullable="false" />
+          <Property Name="frequancy" Type="int" Nullable="false" />
+          <Property Name="position" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="page">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="content" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="terms_before_Stemming">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="term" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="doc_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_indexer_page">
+          <End Role="page" Type="Self.page" Multiplicity="1" />
+          <End Role="indexer" Type="Self.indexer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="page">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="indexer">
+              <PropertyRef Name="doc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_terms_before_Stemming_page">
+          <End Role="page" Type="Self.page" Multiplicity="1" />
+          <End Role="terms_before_Stemming" Type="Self.terms_before_Stemming" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="page">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="terms_before_Stemming">
+              <PropertyRef Name="doc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="crawllerdbModelStoreContainer">
+          <EntitySet Name="indexer" EntityType="Self.indexer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="page" EntityType="Self.page" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="terms_before_Stemming" EntityType="Self.terms_before_Stemming" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_indexer_page" Association="Self.FK_indexer_page">
+            <End Role="page" EntitySet="page" />
+            <End Role="indexer" EntitySet="indexer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_terms_before_Stemming_page" Association="Self.FK_terms_before_Stemming_page">
+            <End Role="page" EntitySet="page" />
+            <End Role="terms_before_Stemming" EntitySet="terms_before_Stemming" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="crawllerdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="indexer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="term" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="doc_id" Type="Int32" Nullable="false" />
+          <Property Name="frequancy" Type="Int32" Nullable="false" />
+          <Property Name="position" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="page" Relationship="Self.FK_indexer_page" FromRole="indexer" ToRole="page" />
+        </EntityType>
+        <EntityType Name="page">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="indexers" Relationship="Self.FK_indexer_page" FromRole="page" ToRole="indexer" />
+          <NavigationProperty Name="terms_before_Stemming" Relationship="Self.FK_terms_before_Stemming_page" FromRole="page" ToRole="terms_before_Stemming" />
+        </EntityType>
+        <EntityType Name="terms_before_Stemming">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="term" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="doc_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="page" Relationship="Self.FK_terms_before_Stemming_page" FromRole="terms_before_Stemming" ToRole="page" />
+        </EntityType>
+        <Association Name="FK_indexer_page">
+          <End Role="page" Type="Self.page" Multiplicity="1" />
+          <End Role="indexer" Type="Self.indexer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="page">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="indexer">
+              <PropertyRef Name="doc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_terms_before_Stemming_page">
+          <End Role="page" Type="Self.page" Multiplicity="1" />
+          <End Role="terms_before_Stemming" Type="Self.terms_before_Stemming" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="page">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="terms_before_Stemming">
+              <PropertyRef Name="doc_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="indexers" EntityType="Self.indexer" />
+          <EntitySet Name="pages" EntityType="Self.page" />
+          <EntitySet Name="terms_before_Stemming" EntityType="Self.terms_before_Stemming" />
+          <AssociationSet Name="FK_indexer_page" Association="Self.FK_indexer_page">
+            <End Role="page" EntitySet="pages" />
+            <End Role="indexer" EntitySet="indexers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_terms_before_Stemming_page" Association="Self.FK_terms_before_Stemming_page">
+            <End Role="page" EntitySet="pages" />
+            <End Role="terms_before_Stemming" EntitySet="terms_before_Stemming" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="crawllerdbModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="indexers">
+            <EntityTypeMapping TypeName="crawllerdbModel.indexer">
+              <MappingFragment StoreEntitySet="indexer">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="term" ColumnName="term" />
+                <ScalarProperty Name="doc_id" ColumnName="doc_id" />
+                <ScalarProperty Name="frequancy" ColumnName="frequancy" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pages">
+            <EntityTypeMapping TypeName="crawllerdbModel.page">
+              <MappingFragment StoreEntitySet="page">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="content" ColumnName="content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="terms_before_Stemming">
+            <EntityTypeMapping TypeName="crawllerdbModel.terms_before_Stemming">
+              <MappingFragment StoreEntitySet="terms_before_Stemming">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="term" ColumnName="term" />
+                <ScalarProperty Name="doc_id" ColumnName="doc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

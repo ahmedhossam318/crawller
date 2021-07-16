@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="crawllerdbModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="indexers">
+      <EntityTypeMapping TypeName="crawllerdbModel.indexer">
+        <MappingFragment StoreEntitySet="indexer">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="term" ColumnName="term" />
+          <ScalarProperty Name="doc_id" ColumnName="doc_id" />
+          <ScalarProperty Name="frequancy" ColumnName="frequancy" />
+          <ScalarProperty Name="position" ColumnName="position" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="pages">
+      <EntityTypeMapping TypeName="crawllerdbModel.page">
+        <MappingFragment StoreEntitySet="page">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="content" ColumnName="content" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="terms_before_Stemming">
+      <EntityTypeMapping TypeName="crawllerdbModel.terms_before_Stemming">
+        <MappingFragment StoreEntitySet="terms_before_Stemming">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="term" ColumnName="term" />
+          <ScalarProperty Name="doc_id" ColumnName="doc_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "search";
+}
+
+<h2>search</h2>
+
+<input  type="search" id="searchrtxt"/>
+<button onclick="search()">search</button>
+
+
+<div class="mycontainer"></div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+
+    function search() {
+        var textsearch = $('#searchrtxt').val();
+        $('.mycontainer').empty()
+        $.ajax({
+            type: "POST",
+            url: "/home/search?searchtext=" + textsearch,
+            success: function (data) {
+
+                var result = "";
+                console.log(JSON.stringify(data.data));
+                $.each(data.data, function (i, j) {
+                    result += `<a href="${j.pageurl}">${j.pageurl}</a>
+<br>`
+                });
+
+                $('.mycontainer').html(result)
+
+            }
+
+
+        });
+
+    }
+    
+</script>

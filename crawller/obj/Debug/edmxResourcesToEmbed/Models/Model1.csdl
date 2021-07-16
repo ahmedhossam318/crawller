@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="crawllerdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="indexer">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="term" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="doc_id" Type="Int32" Nullable="false" />
+    <Property Name="frequancy" Type="Int32" Nullable="false" />
+    <Property Name="position" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="page" Relationship="Self.FK_indexer_page" FromRole="indexer" ToRole="page" />
+  </EntityType>
+  <EntityType Name="page">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="indexers" Relationship="Self.FK_indexer_page" FromRole="page" ToRole="indexer" />
+    <NavigationProperty Name="terms_before_Stemming" Relationship="Self.FK_terms_before_Stemming_page" FromRole="page" ToRole="terms_before_Stemming" />
+  </EntityType>
+  <EntityType Name="terms_before_Stemming">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="term" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="doc_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="page" Relationship="Self.FK_terms_before_Stemming_page" FromRole="terms_before_Stemming" ToRole="page" />
+  </EntityType>
+  <Association Name="FK_indexer_page">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="indexer" Type="Self.indexer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="indexer">
+        <PropertyRef Name="doc_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_terms_before_Stemming_page">
+    <End Role="page" Type="Self.page" Multiplicity="1" />
+    <End Role="terms_before_Stemming" Type="Self.terms_before_Stemming" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="page">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="terms_before_Stemming">
+        <PropertyRef Name="doc_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="indexers" EntityType="Self.indexer" />
+    <EntitySet Name="pages" EntityType="Self.page" />
+    <EntitySet Name="terms_before_Stemming" EntityType="Self.terms_before_Stemming" />
+    <AssociationSet Name="FK_indexer_page" Association="Self.FK_indexer_page">
+      <End Role="page" EntitySet="pages" />
+      <End Role="indexer" EntitySet="indexers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_terms_before_Stemming_page" Association="Self.FK_terms_before_Stemming_page">
+      <End Role="page" EntitySet="pages" />
+      <End Role="terms_before_Stemming" EntitySet="terms_before_Stemming" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
